@@ -24,8 +24,7 @@ IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)
 
         services.AddHostedService<Worker>()
             .AddInfrastructure(configuration)
-            .AddTelegramBot(configuration)
-            .AddSingleton<IAssistant, Bot>();
+            .AddTelegramBot(configuration);
     });
 
 try

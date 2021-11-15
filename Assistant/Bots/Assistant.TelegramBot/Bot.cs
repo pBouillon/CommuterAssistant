@@ -1,11 +1,11 @@
 ﻿using Assistant.Contracts.Bot;
 using Assistant.Infrastructure;
+using Assistant.TelegramBot.Handlers.Chat;
 
 using Microsoft.Extensions.Logging;
 
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
-using Telegram.Bot.Types;
 
 namespace Assistant.TelegramBot;
 
@@ -13,12 +13,21 @@ public class Bot : IAssistant
 {
     private readonly BotConfiguration _botConfiguration;
  
-    private readonly ITelegramBotClient _client;
+    private readonly ChatEventsHandler _chatEventsHandler;
+
+    private readonly ITelegramBotClient _telegramClient;
 
     private readonly ILogger<Bot> _logger;
 
-    public Bot(BotConfiguration botConfiguration, ITelegramBotClient client, ILogger<Bot> logger)
-        => (_botConfiguration, _client, _logger) = (botConfiguration, client, logger);
+    public Bot(
+        BotConfiguration botConfiguration, ChatEventsHandler chatEventsHandler,
+        ITelegramBotClient telegramClient, ILogger<Bot> logger)
+    {
+        _botConfiguration = botConfiguration;
+        _chatEventsHandler = chatEventsHandler;
+        _telegramClient = telegramClient;
+        _logger = logger;
+    }
 
     public void StartReceiving(CancellationToken cancellationToken)
     {
@@ -26,13 +35,9 @@ public class Bot : IAssistant
             "Starting the assistant with the following allowed users: {AllowedUsers}",
             _botConfiguration.AllowedUsers);
 
-        var updateHandler = new DefaultUpdateHandler(HandleUpdateAsync, HandleErrorAsync);
-        _client.StartReceiving(updateHandler, cancellationToken);
+        var (chatUpdateHandler, errorHandler) = _chatEventsHandler.Handlers;
+
+        var updateHandler = new DefaultUpdateHandler(chatUpdateHandler, errorHandler);
+        _telegramClient.StartReceiving(updateHandler, cancellationToken);
     }
-
-    private Task HandleErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken cancellationToken)
-        => throw new NotImplementedException();
-
-    private Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken cancellationToken)
-        => throw new NotImplementedException();
 }

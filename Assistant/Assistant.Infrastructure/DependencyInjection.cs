@@ -13,7 +13,8 @@ public static class DepencencyInjection
             .GetSection(nameof(BotConfiguration))
             .Get<BotConfiguration>();
 
-        services.AddSingleton(botConfiguration);
+        services
+            .AddSingleton(botConfiguration);
 
         return services;
     }
