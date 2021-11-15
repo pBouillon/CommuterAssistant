@@ -1,4 +1,4 @@
-namespace Assistant.Infrastructure;
+namespace Assistant.Bot.Core;
 
 public interface IAssistant
 {

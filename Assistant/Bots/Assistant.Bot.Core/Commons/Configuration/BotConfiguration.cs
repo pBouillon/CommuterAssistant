@@ -1,4 +1,4 @@
-﻿namespace Assistant.Contracts.Bot;
+﻿namespace Assistant.Bot.Core.Commons.Configuration;
 
 public class BotConfiguration
 {

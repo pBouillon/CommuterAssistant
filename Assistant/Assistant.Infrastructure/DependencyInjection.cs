@@ -1,4 +1,4 @@
-﻿using Assistant.Contracts.Bot;
+﻿using Assistant.Bot.Core.Commons.Configuration;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

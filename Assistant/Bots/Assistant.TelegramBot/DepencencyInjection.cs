@@ -1,8 +1,7 @@
-﻿using Assistant.Contracts.Bot;
-using Assistant.Infrastructure;
+﻿using Assistant.Bot.Core;
+using Assistant.Bot.Core.Commons.Configuration;
 using Assistant.TelegramBot.Handlers.Chat;
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Telegram.Bot;
@@ -11,7 +10,7 @@ namespace Assistant.TelegramBot;
 
 public static class DepencencyInjection
 {
-    public static IServiceCollection AddTelegramBot(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddTelegramBot(this IServiceCollection services)
     {
         services.AddSingleton<ITelegramBotClient>(builder =>
         {

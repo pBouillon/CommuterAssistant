@@ -1,4 +1,4 @@
-﻿using Assistant.Contracts.Chat;
+﻿using Assistant.Bot.Core.Chat;
 
 using Telegram.Bot;
 using Telegram.Bot.Types;

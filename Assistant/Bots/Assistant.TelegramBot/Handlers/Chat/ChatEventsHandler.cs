@@ -1,4 +1,4 @@
-﻿using Assistant.Contracts.Bot;
+﻿using Assistant.Bot.Core.Commons.Configuration;
 using Assistant.TelegramBot.Commons.Extensions;
 using Assistant.TelegramBot.Contracts;
 

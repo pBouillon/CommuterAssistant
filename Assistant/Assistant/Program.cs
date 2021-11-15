@@ -24,7 +24,7 @@ IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)
 
         services.AddHostedService<Worker>()
             .AddInfrastructure(configuration)
-            .AddTelegramBot(configuration);
+            .AddTelegramBot();
     });
 
 try

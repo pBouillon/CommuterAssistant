@@ -8,16 +8,17 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 	<PackageReference Include="Telegram.Bot" Version="16.0.2" />
 	<PackageReference Include="Telegram.Bot.Extensions.Polling" Version="0.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Assistant.Infrastructure\Assistant.Infrastructure.csproj" />
+    <Folder Include="Handlers\Messages\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Messages\" />
+    <ProjectReference Include="..\Assistant.Bot.Core\Assistant.Bot.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
-﻿using Assistant.Contracts.Bot;
-using Assistant.Infrastructure;
+﻿using Assistant.Bot.Core;
+using Assistant.Bot.Core.Commons.Configuration;
 using Assistant.TelegramBot.Handlers.Chat;
 
 using Microsoft.Extensions.Logging;

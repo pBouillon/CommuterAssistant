@@ -1,4 +1,4 @@
-using Assistant.Infrastructure;
+using Assistant.Bot.Core;
 
 namespace Assistant;
 
