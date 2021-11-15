@@ -98,7 +98,12 @@ public class ChatEventsHandler
 
         return context.Client.ReplyToAsync(
             context.Message,
-            "You do not belong to the authorized users, your request has been discarded.",
+            string.Join("\n",
+                "This message cannot be processed.",
+                "",
+                "To set your points of interest, please use:",
+                "/home longitude, latitude",
+                "/work longitude, latitude"),
             cancellationToken);
     }
 }
