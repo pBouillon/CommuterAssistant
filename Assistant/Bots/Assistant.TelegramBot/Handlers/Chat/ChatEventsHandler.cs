@@ -68,8 +68,10 @@ public class ChatEventsHandler
 
         var updatedLocation = message switch
         {
-            var home when home.StartsWith("/home") => await _mediator.Send(new SetHomeLocationRequest(), cancellationToken),
-            var workplace when workplace.StartsWith("/work") => await _mediator.Send(new SetWorkplaceLocationRequest(), cancellationToken),
+            var home when home.StartsWith("/home") => await _mediator.Send(
+                new SetHomeLocationRequest { Context = context }, cancellationToken),
+            var workplace when workplace.StartsWith("/work") => await _mediator.Send(
+                new SetWorkplaceLocationRequest { Context = context }, cancellationToken),
             _ => string.Join("\n",
                     "This message cannot be processed.",
                     "",

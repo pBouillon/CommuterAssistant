@@ -4,11 +4,14 @@ using Assistant.Infrastructure;
 using Assistant.Infrastructure.Persistence;
 using Assistant.TelegramBot;
 
+using Destructurama;
+
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
 Log.Logger = new LoggerConfiguration()
+    .Destructure.UsingAttributes()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
     .MinimumLevel.Override("System", LogEventLevel.Warning)

@@ -2,7 +2,7 @@
 
 namespace Assistant.Bot.Core.Messages;
 
-public class GetNextDepartureRequest : IRequest<string>
+public class GetNextDepartureRequest : BotRequest<string>
 {
 }
 

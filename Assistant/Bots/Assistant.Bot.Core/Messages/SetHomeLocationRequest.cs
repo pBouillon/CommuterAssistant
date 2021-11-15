@@ -2,7 +2,7 @@
 
 namespace Assistant.Bot.Core.Messages;
 
-public class SetHomeLocationRequest : IRequest<string>
+public class SetHomeLocationRequest : BotRequest<string>
 {
 }
 
