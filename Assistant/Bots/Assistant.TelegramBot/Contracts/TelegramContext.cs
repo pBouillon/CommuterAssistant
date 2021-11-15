@@ -11,5 +11,6 @@ public class TelegramContext : IChatContext
 
     public ITelegramBotClient Client { get; init; } = null!;
 
-    public User Sender => Message.From;
+    public User Sender
+        => Message.From;
 }
