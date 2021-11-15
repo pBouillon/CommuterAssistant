@@ -1,6 +1,13 @@
-﻿namespace Assistant.Infrastructure.Persistence;
+﻿using Assistant.Bot.Core.Services;
 
-public class ApplicationContext
+using Microsoft.EntityFrameworkCore;
+
+namespace Assistant.Infrastructure.Persistence;
+
+public class ApplicationContext : DbContext, IApplicationContext
 {
-    
+    public ApplicationContext(DbContextOptions<ApplicationContext> options)
+            : base(options)
+    {
+    }
 }

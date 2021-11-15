@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Messages\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Assistant.Bot.Core\Assistant.Bot.Core.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,9 @@
 ﻿using Assistant.Bot.Core.Commons.Configuration;
+using Assistant.Bot.Core.Services;
+using Assistant.Infrastructure.Persistence;
 
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +18,20 @@ public static class DepencencyInjection
             .Get<BotConfiguration>();
 
         services
+            .AddPersistence()
             .AddSingleton(botConfiguration);
+
+        return services;
+    }
+
+    private static IServiceCollection AddPersistence(this IServiceCollection services)
+    {
+        var keepAliveConnection = new SqliteConnection("DataSource=:memory:");
+        keepAliveConnection.Open();
+
+        services
+            .AddDbContext<ApplicationContext>(options => options.UseSqlite(keepAliveConnection))
+            .AddTransient<IApplicationContext, ApplicationContext>();
 
         return services;
     }
