@@ -1,6 +1,9 @@
 ﻿using Assistant.Bot.Core.Commons.Configuration;
+using Assistant.Bot.Core.Messages;
 using Assistant.TelegramBot.Chat;
 using Assistant.TelegramBot.Commons.Extensions;
+
+using MediatR;
 
 using Microsoft.Extensions.Logging;
 
@@ -16,8 +19,10 @@ public class ChatEventsHandler
 
     private readonly ILogger<ChatEventsHandler> _logger;
 
-    public ChatEventsHandler(BotConfiguration botConfiguration, ILogger<ChatEventsHandler> logger)
-        => (_botConfiguration, _logger) = (botConfiguration, logger);
+    private readonly IMediator _mediator;
+
+    public ChatEventsHandler(BotConfiguration botConfiguration, ILogger<ChatEventsHandler> logger, IMediator mediator)
+        => (_botConfiguration, _logger, _mediator) = (botConfiguration, logger, mediator);
 
     public (Func<ITelegramBotClient, Update, CancellationToken, Task>, Func<ITelegramBotClient, Exception, CancellationToken, Task>) Handlers
         => (HandleUpdateAsync, HandleErrorAsync);
@@ -45,11 +50,9 @@ public class ChatEventsHandler
         await handleIncomingMessageTask;
     }
 
-    private Task HandleUnauthorizedUserMessageAsync(TelegramContext context, CancellationToken cancellationToken)
+    private Task<Message> HandleUnauthorizedUserMessageAsync(TelegramContext context, CancellationToken cancellationToken)
     {
-        _logger.LogWarning(
-            "Message received from the unauthorized sender {Sender}",
-            context.Sender.Username);
+        _logger.LogWarning("Message received from the unauthorized sender {Sender}", context.SenderUsername);
 
         return context.Client.ReplyToAsync(
             context.Message,
@@ -57,33 +60,39 @@ public class ChatEventsHandler
             cancellationToken);
     }
 
-    private Task HandleTextMessageAsync(TelegramContext context, CancellationToken cancellationToken)
+    private async Task<Message> HandleTextMessageAsync(TelegramContext context, CancellationToken cancellationToken)
     {
-        _logger.LogInformation(
-            "Received {Content} from {Sender}",
-            context.Message.Text, context.Sender.Username);
+        var message = context.Message.Text;
+            
+        _logger.LogInformation("Received {Content} from {Sender}", message, context.SenderUsername);
 
-        return context.Client.ReplyToAsync(
-            context.Message,
-            "Text received.",
-            cancellationToken);
+        var updatedLocation = message switch
+        {
+            var home when home.StartsWith("/home") => await _mediator.Send(new SetHomeLocationRequest(), cancellationToken),
+            var workplace when workplace.StartsWith("/work") => await _mediator.Send(new SetWorkplaceLocationRequest(), cancellationToken),
+            _ => string.Join("\n",
+                    "This message cannot be processed.",
+                    "",
+                    "To set your points of interest, please use:",
+                    "/home longitude, latitude",
+                    "/work longitude, latitude")
+        };
+
+        return await context.Client.ReplyToAsync(context.Message, updatedLocation, cancellationToken);
     }
 
-    private Task HandleLocationMessageAsync(TelegramContext context, CancellationToken cancellationToken)
+    private async Task<Message> HandleLocationMessageAsync(TelegramContext context, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Received {Sender}'s location", context.Sender.Username);
+        _logger.LogInformation("Received {Sender}'s location", context.SenderUsername);
 
-        return context.Client.ReplyToAsync(
-            context.Message,
-            "Location received",
-            cancellationToken);
+        var nextDepartureInsights = await _mediator.Send(new GetNextDepartureRequest(), cancellationToken);
+
+        return await context.Client.ReplyToAsync(context.Message, nextDepartureInsights, cancellationToken);
     }
 
-    private Task HandleOtherMessageTypeAsync(TelegramContext context, CancellationToken cancellationToken)
+    private Task<Message> HandleOtherMessageTypeAsync(TelegramContext context, CancellationToken cancellationToken)
     {
-        _logger.LogWarning(
-            "Received unhandled message type ({Type}) from {Sender}",
-            context.Message.Type, context.Sender.Username);
+        _logger.LogWarning("Received unhandled message type ({Type}) from {Sender}", context.Message.Type, context.SenderUsername);
 
         return context.Client.ReplyToAsync(
             context.Message,

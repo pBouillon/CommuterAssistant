@@ -1,11 +1,13 @@
-﻿namespace Assistant.Bot.Core.Messages;
+﻿using MediatR;
 
-public class GetNextDepartureRequest
+namespace Assistant.Bot.Core.Messages;
+
+public class GetNextDepartureRequest : IRequest<string>
 {
-        
 }
 
-public class GetNextDepartureRequestHandler
+public class GetNextDepartureRequestHandler : IRequestHandler<GetNextDepartureRequest, string>
 {
-
+    public Task<string> Handle(GetNextDepartureRequest request, CancellationToken cancellationToken)
+        => Task.FromResult(request.GetType().Name);
 }

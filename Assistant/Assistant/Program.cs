@@ -1,4 +1,5 @@
 using Assistant;
+using Assistant.Bot.Core;
 using Assistant.Infrastructure;
 using Assistant.Infrastructure.Persistence;
 using Assistant.TelegramBot;
@@ -25,6 +26,7 @@ IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)
 
         services.AddHostedService<Worker>()
             .AddInfrastructure(configuration)
+            .AddBotCore()
             .AddTelegramBot();
 });
 

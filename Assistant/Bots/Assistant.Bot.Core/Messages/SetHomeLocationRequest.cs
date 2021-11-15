@@ -1,12 +1,13 @@
-﻿namespace Assistant.Bot.Core.Messages;
+﻿using MediatR;
 
-public class SetHomeLocationRequest
+namespace Assistant.Bot.Core.Messages;
+
+public class SetHomeLocationRequest : IRequest<string>
 {
-        
 }
 
-public class SetHomeLocationRequestHandler
+public class SetHomeLocationRequestHandler : IRequestHandler<SetHomeLocationRequest, string>
 {
-
+    public Task<string> Handle(SetHomeLocationRequest request, CancellationToken cancellationToken)
+        => Task.FromResult(request.GetType().Name);
 }
-
