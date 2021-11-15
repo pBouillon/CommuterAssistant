@@ -4,11 +4,11 @@ namespace Assistant;
 
 public class Worker : BackgroundService
 {
+    private readonly IAssistant _assistant;
+    
     private readonly ILogger<Worker> _logger;
     
-    private readonly IAssistant _assistant;
-
-    public Worker(IAssistant assistant,  ILogger<Worker> logger)
+    public Worker(IAssistant assistant, ILogger<Worker> logger)
         => (_assistant, _logger) = (assistant, logger);
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Assistant.Contracts\Assistant.Contracts.csproj" />
     <ProjectReference Include="..\Assistant.Infrastructure\Assistant.Infrastructure.csproj" />
     <ProjectReference Include="..\Bots\Assistant.TelegramBot\Assistant.TelegramBot.csproj" />
   </ItemGroup>
