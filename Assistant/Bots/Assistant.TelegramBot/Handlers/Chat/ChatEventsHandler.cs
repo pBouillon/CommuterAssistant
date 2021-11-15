@@ -1,6 +1,6 @@
 ﻿using Assistant.Bot.Core.Commons.Configuration;
+using Assistant.TelegramBot.Chat;
 using Assistant.TelegramBot.Commons.Extensions;
-using Assistant.TelegramBot.Contracts;
 
 using Microsoft.Extensions.Logging;
 
@@ -32,7 +32,7 @@ public class ChatEventsHandler
     {
         var chatContext = new TelegramContext { Client = client, Message = update.Message };
 
-        var isUserAllowed = _botConfiguration.AllowedUsers.Contains(chatContext.Sender.Username);
+        var isUserAllowed = _botConfiguration.AllowedUsers.Contains(chatContext.SenderUsername);
 
         var handleIncomingMessageTask = (isUserAllowed, chatContext.Message.Type) switch
         {

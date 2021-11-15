@@ -3,7 +3,7 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace Assistant.TelegramBot.Contracts;
+namespace Assistant.TelegramBot.Chat;
 
 public class TelegramContext : IChatContext
 {
@@ -13,4 +13,7 @@ public class TelegramContext : IChatContext
 
     public User Sender
         => Message.From;
+
+    public string SenderUsername
+        => Sender.Username;
 }
