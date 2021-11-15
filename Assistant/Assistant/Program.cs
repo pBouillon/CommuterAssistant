@@ -1,5 +1,6 @@
 using Assistant;
 using Assistant.Infrastructure;
+using Assistant.Infrastructure.Persistence;
 using Assistant.TelegramBot;
 
 using Serilog;
@@ -25,12 +26,24 @@ IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)
         services.AddHostedService<Worker>()
             .AddInfrastructure(configuration)
             .AddTelegramBot();
-    });
+});
 
 try
 {
+    Log.Information("Starting the assistant ..."); 
+    var host = hostBuilder.Build(); 
+    
+    Log.Information("Initializing the database ...");
+    await host.Services
+        .GetRequiredService<IServiceScopeFactory>()
+        .CreateScope()
+        .ServiceProvider
+        .GetRequiredService<ApplicationContext>()
+        .Database
+        .EnsureCreatedAsync();
+
     Log.Information("Starting the assistant ...");
-    await hostBuilder.Build().RunAsync();
+    await host.RunAsync();
 
     return 0;
 }
