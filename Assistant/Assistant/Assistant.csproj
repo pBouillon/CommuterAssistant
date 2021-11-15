@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Assistant-980338B1-8A38-4375-B3B6-CE9182DF83F9</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+	  <PackageReference Include="Serilog" Version="2.10.0" />
+	  <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+	  <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Assistant.Infrastructure\Assistant.Infrastructure.csproj" />
+    <ProjectReference Include="..\Bots\Assistant.TelegramBot\Assistant.TelegramBot.csproj" />
+  </ItemGroup>
+</Project>
