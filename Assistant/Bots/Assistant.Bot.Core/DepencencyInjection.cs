@@ -12,6 +12,7 @@ public static class DepencencyInjection
 {
     public static IServiceCollection AddBotCore(this IServiceCollection services)
         => services.AddMediatR(Assembly.GetExecutingAssembly())
+            .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(CreateUserProfileIfNeededBehaviour<,>));
 }

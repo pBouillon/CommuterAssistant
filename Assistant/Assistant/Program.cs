@@ -31,7 +31,7 @@ IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)
             .AddInfrastructure(configuration)
             .AddBotCore()
             .AddTelegramBot();
-});
+    });
 
 try
 {

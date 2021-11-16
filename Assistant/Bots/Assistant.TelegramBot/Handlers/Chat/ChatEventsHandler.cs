@@ -1,11 +1,17 @@
-﻿using Assistant.Bot.Core.Commons.Configuration;
+﻿using Assistant.Bot.Core.Chat;
+using Assistant.Bot.Core.Commons.Configuration;
+using Assistant.Bot.Core.Commons.Exceptions;
 using Assistant.Bot.Core.Messages;
+using Assistant.Contracts.Location;
 using Assistant.TelegramBot.Chat;
+using Assistant.TelegramBot.Commons.Exceptions;
 using Assistant.TelegramBot.Commons.Extensions;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
+
+using System.Globalization;
 
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -37,17 +43,35 @@ public class ChatEventsHandler
     {
         var chatContext = new TelegramContext { Client = client, Message = update.Message };
 
+        if (chatContext.Message is null)
+        {
+            _logger.LogWarning("Received a message of type {Type} with en empty Message payload: {@Message}", update.Type, update);
+            return;
+        }
+
         var isUserAllowed = _botConfiguration.AllowedUsers.Contains(chatContext.SenderUsername);
 
-        var handleIncomingMessageTask = (isUserAllowed, chatContext.Message.Type) switch
+        try
         {
-            (true, MessageType.Text) => HandleTextMessageAsync(chatContext, cancellationToken),
-            (true, MessageType.Location) => HandleLocationMessageAsync(chatContext, cancellationToken),
-            (true, _) => HandleOtherMessageTypeAsync(chatContext, cancellationToken),
-            _ => HandleUnauthorizedUserMessageAsync(chatContext, cancellationToken),
-        };
+            var handleIncomingMessageTask = (isUserAllowed, chatContext.Message.Type) switch
+            {
+                (true, MessageType.Text) => HandleTextMessageAsync(chatContext, cancellationToken),
+                (true, MessageType.Location) => HandleLocationMessageAsync(chatContext, cancellationToken),
+                (true, _) => HandleOtherMessageType(chatContext),
+                _ => HandleUnauthorizedUserMessageAsync(chatContext, cancellationToken),
+            };
 
-        await handleIncomingMessageTask;
+            await handleIncomingMessageTask;
+        }
+        catch (AssistantException exception)
+        {
+            _logger.LogError(exception, "An error occurred while processing the message of {Sender}", chatContext.SenderUsername);
+
+            await chatContext.Client.ReplyToAsync(
+                chatContext.Message,
+                exception.FriendlyErrorMessage,
+                cancellationToken);
+        }
     }
 
     private Task<Message> HandleUnauthorizedUserMessageAsync(TelegramContext context, CancellationToken cancellationToken)
@@ -63,24 +87,63 @@ public class ChatEventsHandler
     private async Task<Message> HandleTextMessageAsync(TelegramContext context, CancellationToken cancellationToken)
     {
         var message = context.Message.Text;
-            
         _logger.LogInformation("Received {Content} from {Sender}", message, context.SenderUsername);
 
-        var updatedLocation = message switch
-        {
-            var home when home.StartsWith("/home") => await _mediator.Send(
-                new SetHomeLocationRequest { Context = context }, cancellationToken),
-            var workplace when workplace.StartsWith("/work") => await _mediator.Send(
-                new SetWorkplaceLocationRequest { Context = context }, cancellationToken),
-            _ => string.Join("\n",
-                    "This message cannot be processed.",
-                    "",
-                    "To set your points of interest, please use:",
-                    "/home longitude, latitude",
-                    "/work longitude, latitude")
-        };
+        var response = message.StartsWith('/')
+            ? await HandleCommandAsync(context, cancellationToken)
+            : throw new InvalidMessageException($"Unhandled message: {message}");
 
-        return await context.Client.ReplyToAsync(context.Message, updatedLocation, cancellationToken);
+        return await context.Client.ReplyToAsync(context.Message, response, cancellationToken);
+    }
+
+    private Task<string> HandleCommandAsync(TelegramContext context, CancellationToken cancellationToken)
+    {
+        var (command, coordinate) = ExtractPayloadFrom(context.Message.Text);
+
+        return command switch
+        {
+            LocationUpdateCommand.Home => _mediator.Send(
+                new SetHomeLocationRequest { Context = context, Coordinate = coordinate, },
+                cancellationToken),
+            LocationUpdateCommand.Work => _mediator.Send(
+                new SetWorkplaceLocationRequest { Context = context, Coordinate = coordinate, },
+                cancellationToken),
+            _ => throw new InvalidCommandException($"Unhandled command: {command}"),
+        };
+    }
+
+    private (LocationUpdateCommand command, GeoCoordinate coordinate) ExtractPayloadFrom(string message)
+    {
+        var rawCommand = message
+            .Split(' ')
+            .First();
+
+        var isKnownCommand = Enum.TryParse<LocationUpdateCommand>(rawCommand[1..], true, out var command);
+        if (!isKnownCommand) throw new InvalidCommandException($"Unknown command: {rawCommand}");
+
+        var rawCoordinates = message
+            .Remove(0, rawCommand.Length)
+            .Split(',')
+            .ToArray();
+
+        if (rawCoordinates.Length != 2) throw new MalformedCommandException();
+
+        try
+        {
+            var coordinates = rawCoordinates
+                .Select(coordinate => double.Parse(coordinate, NumberStyles.Any, CultureInfo.InvariantCulture))
+                .ToArray();
+
+            return (command, new()
+            {
+                Longitude = coordinates[0],
+                Latitude = coordinates[1],
+            });
+        }
+        catch (Exception ex)
+        {
+            throw new MalformedCommandException("An error occurred while converting the payload to a GeoCoordinate", ex);
+        }
     }
 
     private async Task<Message> HandleLocationMessageAsync(TelegramContext context, CancellationToken cancellationToken)
@@ -92,18 +155,7 @@ public class ChatEventsHandler
         return await context.Client.ReplyToAsync(context.Message, nextDepartureInsights, cancellationToken);
     }
 
-    private Task<Message> HandleOtherMessageTypeAsync(TelegramContext context, CancellationToken cancellationToken)
-    {
-        _logger.LogWarning("Received unhandled message type ({Type}) from {Sender}", context.Message.Type, context.SenderUsername);
-
-        return context.Client.ReplyToAsync(
-            context.Message,
-            string.Join("\n",
-                "This message cannot be processed.",
-                "",
-                "To set your points of interest, please use:",
-                "/home longitude, latitude",
-                "/work longitude, latitude"),
-            cancellationToken);
-    }
+    private Task<Message> HandleOtherMessageType(TelegramContext context)
+        => throw new InvalidMessageTypeException(
+            $"Received unhandled message type ({context.Message.Type}) received from {context.SenderUsername}");
 }

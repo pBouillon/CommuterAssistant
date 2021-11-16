@@ -1,9 +1,12 @@
-﻿using MediatR;
+﻿using Assistant.Contracts.Location;
+
+using MediatR;
 
 namespace Assistant.Bot.Core.Messages;
 
 public class SetHomeLocationRequest : BotRequest<string>
 {
+    public GeoCoordinate Coordinate { get; init; } = new();
 }
 
 public class SetHomeLocationRequestHandler : IRequestHandler<SetHomeLocationRequest, string>
