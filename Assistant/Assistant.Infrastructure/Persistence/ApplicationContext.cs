@@ -7,6 +7,8 @@ namespace Assistant.Infrastructure.Persistence;
 
 public class ApplicationContext : DbContext, IApplicationContext
 {
+    public DbSet<Coordinate> Coordinates { get; set; } = null!;
+
     public DbSet<User> Users { get; set; } = null!;
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
