@@ -2,7 +2,7 @@
 using Assistant.Bot.Core.Commons.Configuration;
 using Assistant.Bot.Core.Commons.Exceptions;
 using Assistant.Bot.Core.Messages;
-using Assistant.Contracts.Location;
+using Assistant.Contracts.ValueObjects.Location;
 using Assistant.TelegramBot.Chat;
 using Assistant.TelegramBot.Commons.Exceptions;
 using Assistant.TelegramBot.Commons.Extensions;

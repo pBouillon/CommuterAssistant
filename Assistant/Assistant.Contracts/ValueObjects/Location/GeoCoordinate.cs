@@ -1,6 +1,6 @@
-﻿namespace Assistant.Contracts.Location;
+﻿namespace Assistant.Contracts.ValueObjects.Location;
 
-public class GeoCoordinate
+public record GeoCoordinate
 {
     public double Longitude { get; set; }
 

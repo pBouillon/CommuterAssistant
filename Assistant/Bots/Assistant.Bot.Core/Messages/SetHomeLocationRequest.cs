@@ -1,4 +1,4 @@
-﻿using Assistant.Contracts.Location;
+﻿using Assistant.Contracts.ValueObjects.Location;
 
 using MediatR;
 
