@@ -134,7 +134,7 @@ public class ChatEventsHandler
                 .Select(coordinate => double.Parse(coordinate, NumberStyles.Any, CultureInfo.InvariantCulture))
                 .ToArray();
 
-            return (command, new()
+            return (command, new GeoCoordinate
             {
                 Latitude = coordinates[0],
                 Longitude = coordinates[1],
