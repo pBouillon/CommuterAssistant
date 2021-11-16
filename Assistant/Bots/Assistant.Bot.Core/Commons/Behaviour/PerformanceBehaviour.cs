@@ -11,7 +11,7 @@ namespace Assistant.Bot.Core.Commons.Behaviour;
 public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : BotRequest<TResponse>, IRequest<TResponse>
 {
-    private const int LongRunningRequestThreshold = 500;
+    private const int LongRunningRequestThreshold = 1_000;
 
     private readonly ILogger<TRequest> _logger;
 

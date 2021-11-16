@@ -2,9 +2,9 @@
 
 public record GeoCoordinate
 {
-    public double Longitude { get; set; }
-
     public double Latitude { get; set; }
+
+    public double Longitude { get; set; }
 
     // From: https://stackoverflow.com/a/60899418/6152689
     public double GetDistanceTo(GeoCoordinate other)

@@ -136,8 +136,8 @@ public class ChatEventsHandler
 
             return (command, new()
             {
-                Longitude = coordinates[0],
-                Latitude = coordinates[1],
+                Latitude = coordinates[0],
+                Longitude = coordinates[1],
             });
         }
         catch (Exception ex)

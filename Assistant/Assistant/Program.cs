@@ -1,5 +1,6 @@
 using Assistant;
 using Assistant.Bot.Core;
+using Assistant.Contracts.Entities;
 using Assistant.Infrastructure;
 using Assistant.Infrastructure.Persistence;
 using Assistant.TelegramBot;
@@ -12,6 +13,18 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 Log.Logger = new LoggerConfiguration()
     .Destructure.UsingAttributes()
+    .Destructure.ByTransforming<User>(user => new
+    {
+        user.Id,
+        user.Name,
+    })
+    .Destructure.ByTransforming<Coordinate>(coordinate => new
+    {
+        coordinate.Id,
+        coordinate.Type,
+        coordinate.Latitude,
+        coordinate.Longitude,
+    })
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
     .MinimumLevel.Override("System", LogEventLevel.Warning)

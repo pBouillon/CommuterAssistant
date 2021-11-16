@@ -6,6 +6,6 @@ public class User
 
     public string Name { get; set; } = null!;
 
-    IList<Coordinate> Coordinates { get; set; } = new List<Coordinate>();
+    public IList<Coordinate> Coordinates { get; set; } = new List<Coordinate>();
 }
 

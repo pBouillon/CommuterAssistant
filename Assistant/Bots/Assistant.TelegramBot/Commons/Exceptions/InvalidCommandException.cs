@@ -8,8 +8,8 @@ public class InvalidCommandException : AssistantException
 This is not a known command.
 
 To set your points of interest, please use:
-→ /home longitude, latitude
-→ /work longitude, latitude
+→ /home latitude, longitude
+→ /work latitude, longitude
 
 Examples:
 → /home 1.23, 4.56

@@ -11,5 +11,7 @@ namespace Assistant.Bot.Core.Services
         DbSet<User> Users { get; }
 
         int SaveChanges();
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

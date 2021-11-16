@@ -33,7 +33,7 @@ public class CreateUserProfileIfNeededBehaviour<TRequest, TResponse> : IPipeline
                 context.Users.Add(user);
 
                 context.SaveChanges();
-                _logger.LogInformation("User {User} has been created", new { user.Id, user.Name });
+                _logger.LogInformation("User {@User} has been created", new { user.Id, user.Name });
             }
         }
 

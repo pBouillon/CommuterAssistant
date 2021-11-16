@@ -6,8 +6,8 @@ public class MalformedCommandException : AssistantException
 {
     public override string FriendlyErrorMessage => @"
 The latitude and longitude should be provided along with the command as:
-→ /home longitude, latitude
-→ /work longitude, latitude
+→ /home latitude, longitude
+→ /work latitude, longitude
 
 Examples:
 → /home 1.23, 4.56

@@ -14,7 +14,7 @@ public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest,
 
     public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        _logger.LogInformation("Incoming request: {@Request}", request);
+        _logger.LogTrace("Incoming request: {@Request}", request);
         return next();
     }
 }
