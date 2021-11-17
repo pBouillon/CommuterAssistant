@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Extensions.Polling;
 
-namespace Assistant.TelegramBot;
+namespace Assistant.Bot.Telegram;
 
 public class Bot : IAssistant
 {

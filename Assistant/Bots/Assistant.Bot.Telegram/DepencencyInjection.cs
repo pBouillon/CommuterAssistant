@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Telegram.Bot;
 
-namespace Assistant.TelegramBot;
+namespace Assistant.Bot.Telegram;
 
 public static class DepencencyInjection
 {

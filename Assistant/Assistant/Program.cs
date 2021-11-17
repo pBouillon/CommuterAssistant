@@ -3,7 +3,7 @@ using Assistant.Bot.Core;
 using Assistant.Contracts.Entities;
 using Assistant.Infrastructure;
 using Assistant.Infrastructure.Persistence;
-using Assistant.TelegramBot;
+using Assistant.Bot.Telegram;
 
 using Destructurama;
 
