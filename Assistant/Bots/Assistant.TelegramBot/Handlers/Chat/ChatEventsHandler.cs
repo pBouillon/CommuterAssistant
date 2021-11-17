@@ -2,6 +2,7 @@
 using Assistant.Bot.Core.Commons.Configuration;
 using Assistant.Bot.Core.Commons.Exceptions;
 using Assistant.Bot.Core.Messages;
+using Assistant.Contracts.Entities;
 using Assistant.Contracts.ValueObjects.Location;
 using Assistant.TelegramBot.Chat;
 using Assistant.TelegramBot.Commons.Exceptions;
@@ -103,10 +104,10 @@ public class ChatEventsHandler
         return command switch
         {
             LocationUpdateCommand.Home => _mediator.Send(
-                new SetHomeLocationRequest { Context = context, Coordinate = coordinate, },
+                new SetHomeLocationRequest { Context = context, Location = coordinate, },
                 cancellationToken),
             LocationUpdateCommand.Work => _mediator.Send(
-                new SetWorkplaceLocationRequest { Context = context, Coordinate = coordinate, },
+                new SetWorkplaceLocationRequest { Context = context, Location = coordinate, },
                 cancellationToken),
             _ => throw new InvalidCommandException($"Unhandled command: {command}"),
         };
@@ -150,7 +151,17 @@ public class ChatEventsHandler
     {
         _logger.LogInformation("Received {Sender}'s location", context.SenderUsername);
 
-        var nextDepartureInsights = await _mediator.Send(new GetNextDepartureRequest(), cancellationToken);
+        var nextDepartureInsights = await _mediator.Send(
+            new GetNextDepartureRequest
+            {
+                Context = context,
+                Location = new GeoCoordinate
+                {
+                    Latitude = context.Message.Location.Latitude,
+                    Longitude = context.Message.Location.Longitude,
+                },
+            }, 
+            cancellationToken);
 
         return await context.Client.ReplyToAsync(context.Message, nextDepartureInsights, cancellationToken);
     }

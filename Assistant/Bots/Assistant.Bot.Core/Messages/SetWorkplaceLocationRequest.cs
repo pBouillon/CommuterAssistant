@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Assistant.Bot.Core.Messages;
 
-public class SetWorkplaceLocationRequest : LocationUpdateRequest<string> { }
+public class SetWorkplaceLocationRequest : BotLocationRequest<string> { }
 
 public class SetWorkplaceLocationRequestHandler : LocationUpdateRequestHandler<SetWorkplaceLocationRequest, string>
 {

@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace Assistant.Bot.Core.Commons.Messages;
 
 public abstract class LocationUpdateRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
-    where TRequest : LocationUpdateRequest<TResponse>
+    where TRequest : BotLocationRequest<TResponse>
 {
     private readonly ILogger<LocationUpdateRequestHandler<TRequest, TResponse>> _logger;
 
@@ -31,8 +31,8 @@ public abstract class LocationUpdateRequestHandler<TRequest, TResponse> : IReque
 
         var homeCoordinate = new Coordinate
         {
-            Longitude = request.Coordinate.Longitude,
-            Latitude = request.Coordinate.Latitude,
+            Longitude = request.Location.Longitude,
+            Latitude = request.Location.Latitude,
             Type = UpdatedCoordinateType,
         };
 
@@ -69,8 +69,8 @@ public abstract class LocationUpdateRequestHandler<TRequest, TResponse> : IReque
 
     private Coordinate UpdateCoordinate(Coordinate coordinate, TRequest request)
     {
-        coordinate.Longitude = request.Coordinate.Longitude;
-        coordinate.Latitude = request.Coordinate.Latitude;
+        coordinate.Longitude = request.Location.Longitude;
+        coordinate.Latitude = request.Location.Latitude;
 
         return coordinate;
     }
