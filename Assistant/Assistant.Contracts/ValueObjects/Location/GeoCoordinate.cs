@@ -2,6 +2,8 @@
 
 public record GeoCoordinate
 {
+    public static readonly GeoCoordinate Default = new();
+
     public double Latitude { get; set; }
 
     public double Longitude { get; set; }

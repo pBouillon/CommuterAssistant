@@ -1,7 +1,7 @@
-﻿using Assistant.Bot.Core.Services;
+﻿using Assistant.Bot.Core.Commons.Messages;
+using Assistant.Bot.Core.Services;
 using Assistant.Contracts.Entities;
 using Assistant.Contracts.Enums;
-using Assistant.Contracts.ValueObjects.Location;
 
 using MediatR;
 
@@ -11,10 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Assistant.Bot.Core.Messages;
 
-public class SetHomeLocationRequest : BotRequest<string>
-{
-    public GeoCoordinate Coordinate { get; init; } = new();
-}
+public class SetHomeLocationRequest : LocationUpdateRequest<string> { }
 
 public class SetHomeLocationRequestHandler : IRequestHandler<SetHomeLocationRequest, string>
 {

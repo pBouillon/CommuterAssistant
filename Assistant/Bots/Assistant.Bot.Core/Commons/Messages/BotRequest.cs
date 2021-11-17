@@ -4,7 +4,7 @@ using Destructurama.Attributed;
 
 using MediatR;
 
-namespace Assistant.Bot.Core.Messages;
+namespace Assistant.Bot.Core.Commons.Messages;
 
 public abstract class BotRequest<TResponse> : IRequest<TResponse>
 {

@@ -1,7 +1,7 @@
-﻿using Assistant.Bot.Core.Services;
+﻿using Assistant.Bot.Core.Commons.Messages;
+using Assistant.Bot.Core.Services;
 using Assistant.Contracts.Entities;
 using Assistant.Contracts.Enums;
-using Assistant.Contracts.ValueObjects.Location;
 
 using MediatR;
 
@@ -12,10 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Assistant.Bot.Core.Messages;
 
-public class SetWorkplaceLocationRequest : BotRequest<string>
-{
-    public GeoCoordinate Coordinate { get; init; } = new();
-}
+public class SetWorkplaceLocationRequest : LocationUpdateRequest<string> { }
 
 public class SetWorkplaceLocationRequestHandler : IRequestHandler<SetWorkplaceLocationRequest, string>
 {

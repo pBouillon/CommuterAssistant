@@ -1,4 +1,4 @@
-﻿using Assistant.Bot.Core.Messages;
+﻿using Assistant.Bot.Core.Commons.Messages;
 
 using MediatR;
 

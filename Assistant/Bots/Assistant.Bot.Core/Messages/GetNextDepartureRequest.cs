@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Assistant.Bot.Core.Commons.Messages;
+
+using MediatR;
 
 namespace Assistant.Bot.Core.Messages;
 
