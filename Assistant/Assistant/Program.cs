@@ -11,6 +11,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 
+// Logger code first's configuration
 Log.Logger = new LoggerConfiguration()
     .Destructure.UsingAttributes()
     .Destructure.ByTransforming<User>(user => new
@@ -34,6 +35,7 @@ Log.Logger = new LoggerConfiguration()
         theme: AnsiConsoleTheme.Code)
     .CreateLogger();
 
+// Configure the host's dependency injection
 IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)
     .UseSerilog()
     .ConfigureServices((hostContext, services) =>
@@ -46,6 +48,7 @@ IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)
             .AddTelegramBot();
     });
 
+// Run the assistant
 try
 {
     Log.Information("Starting the assistant ..."); 
