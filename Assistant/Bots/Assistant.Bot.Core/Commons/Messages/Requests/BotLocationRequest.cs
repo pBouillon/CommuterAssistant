@@ -11,5 +11,5 @@ public class BotLocationRequest<TResponse> : BotRequest<TResponse>
     /// <summary>
     /// Location transmitted by the user
     /// </summary>
-    public GeoCoordinate Location { get; set; } = GeoCoordinate.Default;
+    public GeoCoordinate Location { get; set; } = new(0, 0);
 }

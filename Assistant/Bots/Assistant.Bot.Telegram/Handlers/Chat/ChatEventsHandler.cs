@@ -2,6 +2,7 @@
 using Assistant.Bot.Core.Commons.Configuration;
 using Assistant.Bot.Core.Commons.Exceptions;
 using Assistant.Bot.Core.Messages;
+using Assistant.Bot.Telegram.Commons.Extensions;
 using Assistant.Contracts.ValueObjects.Location;
 using Assistant.TelegramBot.Chat;
 using Assistant.TelegramBot.Commons.Exceptions;
@@ -202,11 +203,7 @@ public class ChatEventsHandler
                 .Select(coordinate => double.Parse(coordinate, NumberStyles.Any, CultureInfo.InvariantCulture))
                 .ToArray();
 
-            return (command, new GeoCoordinate
-            {
-                Latitude = coordinates[0],
-                Longitude = coordinates[1],
-            });
+            return (command, new GeoCoordinate(coordinates[0], coordinates[1]));
         }
         catch (Exception ex)
         {
@@ -230,11 +227,7 @@ public class ChatEventsHandler
             new GetNextDepartureRequest
             {
                 Context = context,
-                Location = new GeoCoordinate
-                {
-                    Latitude = context.Message.Location.Latitude,
-                    Longitude = context.Message.Location.Longitude,
-                },
+                Location = context.Message.GetGeoCoordinate(),
             }, 
             cancellationToken);
 

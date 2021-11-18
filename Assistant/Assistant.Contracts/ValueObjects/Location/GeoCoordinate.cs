@@ -1,14 +1,18 @@
 ﻿namespace Assistant.Contracts.ValueObjects.Location;
 
-public record GeoCoordinate
+/// <summary>
+/// Represent a carthesian coordinate
+/// </summary>
+/// <param name="Latitude">The coordinate's latitude</param>
+/// <param name="Longitude">The coordinate's latitude</param>
+public record GeoCoordinate(double Latitude, double Longitude)
 {
-    public static readonly GeoCoordinate Default = new();
-
-    public double Latitude { get; set; }
-
-    public double Longitude { get; set; }
-
-    // From: https://stackoverflow.com/a/60899418/6152689
+    /// <summary>
+    /// Estimate the distance between two <see cref="GeoCoordinate"/> according to
+    /// <a href="https://stackoverflow.com/a/60899418/6152689">this StackOverflow answer</a>.
+    /// </summary>
+    /// <param name="other">The targeted coordinate</param>
+    /// <returns>The distance to the other coordinate, in meters</returns>
     public double GetDistanceTo(GeoCoordinate other)
     {
         var d1 = Latitude * (Math.PI / 180.0);
