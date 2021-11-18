@@ -19,7 +19,8 @@ public static class DepencencyInjection
     /// <param name="services">The dependency injection container</param>
     /// <returns>The dependency injection container</returns>
     public static IServiceCollection AddBotCore(this IServiceCollection services)
-        => services.AddMediatR(Assembly.GetExecutingAssembly())
+        => services
+            .AddMediatR(Assembly.GetExecutingAssembly())
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>))
             .AddTransient(typeof(IPipelineBehavior<,>), typeof(CreateUserProfileIfNeededBehaviour<,>));
