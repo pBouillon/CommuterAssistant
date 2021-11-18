@@ -49,6 +49,7 @@ console.
 - [x] Some kind of persistence
 - [ ] Send back the next departure
 - [ ] Unit testing
+- [ ] CI with GitHub Actions
 - [ ] Discord integration
 - [ ] Support different sources simultaneously (ex: update your home location
   from Discord and ask for the next departure from Telegram)
